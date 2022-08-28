@@ -6,18 +6,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import com.dmm.task.service.AccountUserDetails;
+import com.dmm.task.service.AccountTaskDetails;
 
 @Configuration 
 @EnableWebSecurity 
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
-	private AccountUserDetails userDetailsService;
+	private AccountTaskDetails taskDetailsService;
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		// AuthenticationManagerBuilderに、実装したUserDetailsServiceを設定する
-		auth.userDetailsService(userDetailsService);
+		auth.userDetailsService(taskDetailsService);
 		super.configure(auth);
 	}
 
@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.formLogin() // フォーム認証の有効化
 				.loginPage("/login") // ログインフォームを表示するパス
 				.loginProcessingUrl("/authenticate") // フォーム認証処理のパス
-				.usernameParameter("userName") // ユーザ名のリクエストパラメータ名
+				.usernameParameter("name") // ユーザ名のリクエストパラメータ名
 				.passwordParameter("password") // パスワードのリクエストパラメータ名
 				.defaultSuccessUrl("/main") // 認証成功時に遷移するデフォルトのパス
 				.failureUrl("/login?error=true"); // 認証失敗時に遷移するパス

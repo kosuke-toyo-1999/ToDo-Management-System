@@ -2,33 +2,37 @@ package com.dmm.task.service;
 
 import java.util.Collection;
 
+import org.springframework.scheduling.config.Task;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class AccountUserDetails implements UserDetails { // UserDetailsを実装する
-	private Users user;
+import com.dmm.task.entity.Tasks;
 
-	public AccountUserDetails(Users user) {
-		this.user = user;
+public class AccountTaskDetails implements UserDetails{
+	
+	private Tasks task;
+
+	public AccountTaskDetails(Tasks task) {
+		this.task = task;
 	}
 
 	// ユーザに与えられている権限リストを返却する
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return AuthorityUtils.createAuthorityList("ROLE_" + user.getRoleName());
+		return AuthorityUtils.createAuthorityList("ROLE_" + task.getName());
 	}
 
 	// パスワードを返却する
 	@Override
 	public String getPassword() {
-		return user.getPassword();
+		return task.getPassword();
 	}
 
 	// ユーザー名を返却する
 	@Override
 	public String getUsername() {
-		return user.getUserName();
+		return task.getName();
 	}
 
 	// アカウントの有効期限の状態を判定する
@@ -56,12 +60,13 @@ public class AccountUserDetails implements UserDetails { // UserDetailsを実装
 	}
 
 	// Entityを返す
-	public Users getUser() {
-		return user;
+	public Task getUser() {
+		return getUser();
 	}
 
 	// 名前を返す
 	public String getName() {
-		return user.getName();
+		return task.getName();
 	}
+
 }

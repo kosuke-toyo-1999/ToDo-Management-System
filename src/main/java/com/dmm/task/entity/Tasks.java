@@ -9,8 +9,8 @@ import lombok.ToString;
 @Data
 @Entity
 @ToString(exclude = "password") // 自動生成されるtoStringにpasswordを出力しない
-
 public class Tasks {
+	
 	@Id
 	public int id;
 	public String title;
@@ -19,6 +19,5 @@ public class Tasks {
 	public String password;
 	public int date;
 	public boolean done;
-
 
 }
