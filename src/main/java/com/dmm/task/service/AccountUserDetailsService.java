@@ -4,14 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-import com.dmm.task.entity.Tasks;
-import com.dmm.task.repository.TasksRepository;
+import com.dmm.task.entity.Users;
+import com.dmm.task.repository.UsersRepository;
 
-public class AccountTaskDetailsService implements UserDetailsService{
-	
+
+@Service // Spring管理Beanであることを指定
+public class AccountUserDetailsService implements UserDetailsService {
+
 	@Autowired
-	private TasksRepository repository;
+	private UsersRepository repository;
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -19,12 +22,11 @@ public class AccountTaskDetailsService implements UserDetailsService{
 			throw new UsernameNotFoundException("ユーザー名が空です");
 		}
 		// データベースからアカウント情報を取得する
-		Tasks user = repository.findById(userName).get();
+		Users user = repository.findById(userName).get();
 		if (user != null) {
 			// UserDetailsの実装クラスを生成して返す
-			return new AccountTaskDetails(user);
+			return new AccountUserDetails(user);
 		}
 		throw new UsernameNotFoundException(userName + "は見つかりません。");
 	}
-
 }
