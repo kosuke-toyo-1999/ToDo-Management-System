@@ -1,6 +1,5 @@
 package com.dmm.task.controller;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,19 +19,17 @@ import com.dmm.task.entity.Tasks;
 import com.dmm.task.repository.TasksRepository;
 import com.dmm.task.service.AccountUserDetails;
 
-import practice.Task;
-
 @Controller
 public class TaskController {
 
 	@Autowired
 	private TasksRepository tasks_repo;
 
-	@GetMapping("main")
+	@GetMapping("/main")
 	public String main(Model model) {
 		// ログイン画面
 		// カレンダーの作成
-		
+
 		// 実行時の日付/時刻情報を持つカレンダーインスタンス作成(ex 2021/01/08 22:00:00)
 		Calendar cal = Calendar.getInstance();
 		// インタンスの持つ日付情報を1日に変更(ex 2021/01/01 22:00:00)
@@ -51,31 +48,27 @@ public class TaskController {
 				// カウンター変数iから求める実際の日付
 				int date = i + 1 - beforeBlank;
 				str = String.valueOf(date);
-				List<Tasks> localDate_list = new ArrayList<>();
-				localDate_list.add(new Tasks);
+				
+				
+				List<String> localDate_list = new ArrayList<>();
+				localDate_list.add(str);
+				
+				model.addAttribute("matrix", localDate_list);
+				
 			}
+
 		}
 
 		List<Tasks> list = tasks_repo.findAll();
 		model.addAttribute("tasks", list);
 		TaskForm taskForm = new TaskForm();
 		model.addAttribute("taskForm", taskForm);
-		return "main";
-	}
-
-	@GetMapping("/login")
-	public String login() {
-		return "login";
-	}
-
-	@GetMapping("/logout")
-	public String logout() {
-		return "create";
+		return "/main";
 	}
 
 	@GetMapping("/")
 	public String index() {
-		return "login";
+		return "/login";
 	}
 
 	@GetMapping("/main/create")
@@ -98,12 +91,26 @@ public class TaskController {
 
 		tasks_repo.save(task);
 
-		return "redirect:";
+		return "/redirect:";
 	}
 
 	@GetMapping("/main/edit/{id}")
 	public String main__edit_id() {
-		return "redirect:";
+		return "/redirect:";
 	}
+	
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
+	
 
+	@GetMapping("/logout")
+	public String logout() {
+		return "login";
+	}
 }
+
+		
+
+
