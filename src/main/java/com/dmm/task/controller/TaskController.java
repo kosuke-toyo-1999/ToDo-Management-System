@@ -1,6 +1,8 @@
 package com.dmm.task.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +19,8 @@ import com.dmm.task.Form.TaskForm;
 import com.dmm.task.entity.Tasks;
 import com.dmm.task.repository.TasksRepository;
 import com.dmm.task.service.AccountUserDetails;
+
+import practice.Task;
 
 @Controller
 public class TaskController {
@@ -47,6 +51,8 @@ public class TaskController {
 				// カウンター変数iから求める実際の日付
 				int date = i + 1 - beforeBlank;
 				str = String.valueOf(date);
+				List<Tasks> localDate_list = new ArrayList<>();
+				localDate_list.add(new Tasks);
 			}
 		}
 
