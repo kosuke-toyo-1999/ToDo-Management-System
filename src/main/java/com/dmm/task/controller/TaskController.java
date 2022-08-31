@@ -1,5 +1,6 @@
 package com.dmm.task.controller;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,12 +39,13 @@ public class TaskController {
 		List<LocalDate> week = new ArrayList<>();
 
 		// ③ その月の1日のLocalDateを取得する
-		LocalDate day;
+		LocalDate day = LocalDate.now().getYear().getMonthValue();
+
 
 		// ④ 曜日を表すDayOfWeekを取得し、
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.DATE, 1);
-		Calendar startDay = calendar(Calendar.DAY_OF_WEEK);
+		day(LocalDate.getDayOfWeek());
+		
+		day(LocalDate.minusDays(DayOfWeek.getValue()));
 
 		// ④ 上で取得したLocalDateに曜日の値（DayOfWeek#getValue)をマイナスして前月分のLocalDateを求める
 		// https://qiita.com/tora_kouno/items/d230f904a2b768ccb319
