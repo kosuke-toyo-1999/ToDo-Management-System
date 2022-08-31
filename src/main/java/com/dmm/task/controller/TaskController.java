@@ -44,7 +44,8 @@ public class TaskController {
 
 		// ④ 曜日を表すDayOfWeekを取得し
 		day.getYear();
-		day(LocalDate.getDayOfWeek());
+		day.getMonthValue();
+		day.getDayOfWeek();
 		
 		day(LocalDate.minusDays(DayOfWeek.getValue()));
 
