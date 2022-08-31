@@ -39,10 +39,11 @@ public class TaskController {
 		List<LocalDate> week = new ArrayList<>();
 
 		// ③ その月の1日のLocalDateを取得する
-		LocalDate day = LocalDate.now().getYear().getMonthValue();
+		LocalDate day = LocalDate.now();
 
 
-		// ④ 曜日を表すDayOfWeekを取得し、
+		// ④ 曜日を表すDayOfWeekを取得し
+		day.getYear();
 		day(LocalDate.getDayOfWeek());
 		
 		day(LocalDate.minusDays(DayOfWeek.getValue()));
