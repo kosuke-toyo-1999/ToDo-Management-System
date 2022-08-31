@@ -27,6 +27,11 @@ public class TaskController {
 
 	@GetMapping("/main")
 	public String main(Model model) {
+		
+		List<Tasks> list = tasks_repo.findAll();
+		model.addAttribute("tasks", list);
+		TaskForm taskForm = new TaskForm();
+		model.addAttribute("taskForm", taskForm);
 		// ログイン画面
 		// カレンダーの作成
 
@@ -40,6 +45,8 @@ public class TaskController {
 		int beforeBlank = cal.get(Calendar.DAY_OF_WEEK) - 1;
 		// その月が何日まであるかは以下のメソッドで求められる(1月は31日)
 		int daysCount = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+		List<String> localDate_list = new ArrayList<>();
 		// ブランクと日数分ループを回す
 		for (int i = 0; i < beforeBlank + daysCount; i++) {
 			String str = "";// ブランクは空文字
@@ -48,21 +55,15 @@ public class TaskController {
 				// カウンター変数iから求める実際の日付
 				int date = i + 1 - beforeBlank;
 				str = String.valueOf(date);
-				
-				
-				List<String> localDate_list = new ArrayList<>();
+
 				localDate_list.add(str);
-				
-				model.addAttribute("matrix", localDate_list);
-				
+
 			}
 
 		}
-
-		List<Tasks> list = tasks_repo.findAll();
-		model.addAttribute("tasks", list);
-		TaskForm taskForm = new TaskForm();
-		model.addAttribute("taskForm", taskForm);
+		model.addAttribute("matrix", localDate_list);
+		
+		
 		return "/main";
 	}
 
@@ -98,19 +99,14 @@ public class TaskController {
 	public String main__edit_id() {
 		return "/redirect:";
 	}
-	
+
 	@GetMapping("/login")
 	public String login() {
 		return "login";
 	}
-	
 
 	@GetMapping("/logout")
 	public String logout() {
 		return "login";
 	}
 }
-
-		
-
-
