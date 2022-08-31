@@ -1,5 +1,6 @@
 package com.dmm.task.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -45,23 +46,30 @@ public class TaskController {
 		int beforeBlank = cal.get(Calendar.DAY_OF_WEEK) - 1;
 		// その月が何日まであるかは以下のメソッドで求められる(1月は31日)
 		int daysCount = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		
+		List<List<LocalDate>> matrix = new ArrayList<>();
 
-		List<String> localDate_list = new ArrayList<>();
-		// ブランクと日数分ループを回す
-		for (int i = 0; i < beforeBlank + daysCount; i++) {
-			String str = "";// ブランクは空文字
-			// 最初のブランク分すぎたら日付
-			if (i >= beforeBlank) {
-				// カウンター変数iから求める実際の日付
-				int date = i + 1 - beforeBlank;
-				str = String.valueOf(date);
+		List<LocalDate> week = new ArrayList<>();
+		LocalDate day;
+		model.addAttribute("matrix", matrix);
+		
 
-				localDate_list.add(str);
-
-			}
-
-		}
-		model.addAttribute("matrix", localDate_list);
+//		List<String> localDate_list = new ArrayList<>();
+//		// ブランクと日数分ループを回す
+//		for (int i = 0; i < beforeBlank + daysCount; i++) {
+//			String str = "";// ブランクは空文字
+//			// 最初のブランク分すぎたら日付
+//			if (i >= beforeBlank) {
+//				// カウンター変数iから求める実際の日付
+//				int date = i + 1 - beforeBlank;
+//				str = String.valueOf(date);
+//
+//				localDate_list.add(str);
+//
+//			}
+//
+//		}
+//		model.addAttribute("matrix", localDate_list);
 		
 		
 		return "/main";
