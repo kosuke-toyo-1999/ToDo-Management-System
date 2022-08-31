@@ -57,7 +57,7 @@ public class TaskController {
 			for (int i = 0; i >= 7; i++) {
 				week.add(Calendar.DATE, 1);
 			}
-			matrix.add(Calendar.DATE, 1);
+			matrix.add(week);
 		}
 
 		// ⑥2週目以降は単純に1日ずつ日を増やしながらLocalDateを求めてListへ格納していき、土曜日になったら1．のリストへ格納して新しいListを生成する（月末を求めるにはLocalDate#lengthOfMonth()を使う）
@@ -67,7 +67,7 @@ public class TaskController {
 				week.add(Calendar.DATE, 1);
 			}
 			
-			matrix.add(Calendar.DATE, 1);
+			matrix.add(week);
 		}
 
 		// ⑦ 最終週の翌月分をDayOfWeekの値を使って計算し、
@@ -77,7 +77,7 @@ public class TaskController {
 				week.add(Calendar.DATE, 1);
 			}
 			
-			matrix.add(Calendar.DATE, 1);
+			matrix.add(week);
 		}
 		
 		
