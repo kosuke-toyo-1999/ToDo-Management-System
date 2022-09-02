@@ -79,10 +79,7 @@ public class TaskController {
 				case 4:
 					matrix.add(week_4);
 					break;
-				case 5:
-					matrix.add(week_5);
-					break;
-				}
+
 				w++;
 				d++;
 			}
