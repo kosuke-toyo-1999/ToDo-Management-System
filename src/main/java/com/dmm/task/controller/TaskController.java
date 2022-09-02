@@ -79,10 +79,11 @@ public class TaskController {
 				case 4:
 					matrix.add(week_4);
 					break;
-
+				}
 				w++;
 				d++;
 			}
+				
 
 			// 1日ごとにdayをweekにaddしなければいけない
 			switch (d) {
@@ -118,6 +119,7 @@ public class TaskController {
 
 		return "/main";
 	}
+	
 
 	@GetMapping("/")
 	public String index() {
