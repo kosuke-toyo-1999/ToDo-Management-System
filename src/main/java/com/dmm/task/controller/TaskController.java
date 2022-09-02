@@ -52,29 +52,21 @@ public class TaskController {
 
 		// ⑤ 1日ずつ増やしてLocalDateを求めていき、2．で作成したListへ格納していき、1週間分詰めたら1．のリストへ格納する
 
-		for (int k = 0; k >= 1; k++) {
+		for ( int i =1; i <=7; i++) {
 		
-			for (int i = 0; i >= 7; i++) {
-				
-				day.plusDays(1);
-			
-			}
-			
-			matrix.add(week);
+			day.minusDays(1);
 		
 		}
+		week.add(LocalDate.of(day));
 
 		// ⑥2週目以降は単純に1日ずつ日を増やしながらLocalDateを求めてListへ格納していき、土曜日になったら1．のリストへ格納して新しいListを生成する（月末を求めるにはLocalDate#lengthOfMonth()を使う）
 
-		for (int m = 0; m >= 7; m++) {
-			
-			for (int i = 0; i >= 7; i++) {
-				
-				day.plusDays(1);
-				
-			}
-			
-			matrix.add(week);
+		for(int i = 7; i <= day.lengthOfMonth(); i++) {
+		    
+		    if(day.getDayOfWeek().equals("SATURDAY")) {
+		        
+		    }
+		    
 		}
 
 		// ⑦ 最終週の翌月分をDayOfWeekの値を使って計算し、
