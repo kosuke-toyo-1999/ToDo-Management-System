@@ -58,6 +58,7 @@ public class TaskController {
 		
 		}
 		week.add(LocalDate.of(day));
+		matrix.add(week);
 
 		// ⑥2週目以降は単純に1日ずつ日を増やしながらLocalDateを求めてListへ格納していき、土曜日になったら1．のリストへ格納して新しいListを生成する（月末を求めるにはLocalDate#lengthOfMonth()を使う）
 
