@@ -33,85 +33,58 @@ public class TaskController {
 		List<List<LocalDate>> matrix = new ArrayList<>();
 
 		// ② 1週間分のLocalDateを格納するListを用意する
-		List<LocalDate> week_1 = new ArrayList<>();
+		List<LocalDate> week = new ArrayList<>();
 
 		// ③ その月の1日のLocalDateを取得する
 		LocalDate day = LocalDate.now();
 		day = LocalDate.of(day.getYear(), day.getMonthValue(), 1);
 
 		// ④ 曜日を表すDayOfWeekを取得し
-		DayOfWeek DayOfWeek_1 = day.getDayOfWeek();
+		DayOfWeek DayOfWeek = day.getDayOfWeek();
 
 		// ④ 上で取得したLocalDateに曜日の値（DayOfWeek#getValue)をマイナスして前月分のLocalDateを求める
 		// https://qiita.com/tora_kouno/items/d230f904a2b768ccb319
 		// http://gucci1208.com/2%E3%81%A4%E3%81%AEcalendar%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%92%E6%AF%94%E8%BC%83%E3%81%97%E3%81%A6%E3%80%81%E6%97%A5%E6%95%B0%E5%B7%AE%E3%82%92%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B-488.html
 		// http://heppoen.seesaa.net/article/480642483.html
-		day = day.minusDays(DayOfWeek_1.getValue());
+		day = day.minusDays(DayOfWeek.getValue());
 
 		// ⑤ 1日ずつ増やしてLocalDateを求めていき、2．で作成したListへ格納していき、1週間分詰めたら1．のリストへ格納する
 
 		for (int i = 1; i <= 7; i++) {
 			// 1日ごとにdayをweekにaddしなければいけない
-			week_1.add(day);
+			week.add(day);
 			// 1日増やす（dayをプラス1日する）
 			day.plusDays(1);
 		}
-		matrix.add(week_1);
+		matrix.add(week);
 
 		// ⑥2週目以降は単純に1日ずつ日を増やしながらLocalDateを求めてListへ格納していき、土曜日になったら1．のリストへ格納して新しいListを生成する（月末を求めるにはLocalDate#lengthOfMonth()を使う）
-		List<LocalDate> week_2 = new ArrayList<>();
-		List<LocalDate> week_3 = new ArrayList<>();
-		List<LocalDate> week_4 = new ArrayList<>();
-		List<LocalDate> week_5 = new ArrayList<>();
 
 		for (int i = 7; i <= day.lengthOfMonth(); i++) {
-			int d = 2;
-			int w = 2;
 
 			if (day.getDayOfWeek() == java.time.DayOfWeek.SATURDAY) {
-				switch (w) {
-				case 2:
-					matrix.add(week_2);
-					break;
-				case 3:
-					matrix.add(week_3);
-					break;
-				case 4:
-					matrix.add(week_4);
-					break;
-				}
-				w++;
-				d++;
-			}
-				
+				matrix.add(week);
 
-			// 1日ごとにdayをweekにaddしなければいけない
-			switch (d) {
-			case 2:
-				week_2.add(day);
-				break;
-			case 3:
-				week_3.add(day);
-				break;
-			case 4:
-				week_4.add(day);
-				break;
+				// 次週のListを新規作成（newをするとまっさらな新しいListを作成できます）
+				week = new ArrayList<>();
 			}
-
 			// 1日増やす（dayをプラス1日する）
 			day = day.plusDays(1);
 		}
 
 		// ⑦ 最終週の翌月分をDayOfWeekの値を使って計算し、
+		week = new ArrayList<>();
 		for (int j = 1; j <= 7 - day.getDayOfWeek().getValue(); j++) {
 			// 1日増やす（dayをプラス1日する）
 			day = day.plusDays(1);
-			week_5.add(day);
+			week.add(day);
 		}
-
 		// ⑦ 6．で生成したリストへ格納し、最後に1．で生成したリストへ格納する
-		matrix.add(week_5);
-
+		// 次週のListを新規作成（newをするとまっさらな新しいListを作成できます）
+		matrix.add(week);
+		model.addAttribute("matrix", matrix);
+		
+		
 		List<Tasks> list = tasks_repo.findAll();
 		model.addAttribute("tasks", list);
 		TaskForm taskForm = new TaskForm();
@@ -119,7 +92,6 @@ public class TaskController {
 
 		return "/main";
 	}
-	
 
 	@GetMapping("/")
 	public String index() {
