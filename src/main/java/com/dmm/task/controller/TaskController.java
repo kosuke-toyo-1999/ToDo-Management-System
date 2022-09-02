@@ -4,7 +4,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,11 +37,10 @@ public class TaskController {
 
 		// ③ その月の1日のLocalDateを取得する
 		LocalDate day = LocalDate.now();
-		day = LocalDate.of(day.getYear(), day.getMonthValue(), 1);  
+		day = LocalDate.of(day.getYear(), day.getMonthValue(), 1);
 
 		// ④ 曜日を表すDayOfWeekを取得し
 		DayOfWeek DayOfWeek = day.getDayOfWeek();
-
 
 		// ④ 上で取得したLocalDateに曜日の値（DayOfWeek#getValue)をマイナスして前月分のLocalDateを求める
 		// https://qiita.com/tora_kouno/items/d230f904a2b768ccb319
@@ -52,44 +50,36 @@ public class TaskController {
 
 		// ⑤ 1日ずつ増やしてLocalDateを求めていき、2．で作成したListへ格納していき、1週間分詰めたら1．のリストへ格納する
 
-		for ( int i =1; i <=7; i++) {
-		
-			day.minusDays(1);
-		
+		for (int i = 1; i <= 7; i++) {
+			// 1日ごとにdayをweekにaddしなければいけない
+			week.add(day);
+			// 1日増やす（dayをプラス1日する）
+			day.plusDays(1);
 		}
-		week.add(LocalDate.of(day));
 		matrix.add(week);
 
 		// ⑥2週目以降は単純に1日ずつ日を増やしながらLocalDateを求めてListへ格納していき、土曜日になったら1．のリストへ格納して新しいListを生成する（月末を求めるにはLocalDate#lengthOfMonth()を使う）
 
-		for(int i = 7; i <= day.lengthOfMonth(); i++) {
-		    
-		    if(day.getDayOfWeek().equals("SATURDAY")) {
-		        
-		    }
-		    
+		for (int i = 7; i <= day.lengthOfMonth(); i++) {
+
+			if (day.getDayOfWeek().equals(java.time.DayOfWeek.SATURDAY)) {
+				matrix.add(week);
+			}
+			// 1日ごとにdayをweekにaddしなければいけない
+			week.add(day);
+			// 1日増やす（dayをプラス1日する）
+			day.plusDays(1);
 		}
 
 		// ⑦ 最終週の翌月分をDayOfWeekの値を使って計算し、
-		
-		for (int n = 0; n == Calendar.lengthOfMonth; n++) {
-			
-			for (int i = 0; i >= 7; i++) {
-				
-				week.add(Calendar.DATE, 1);
-				
-			}
-			
-			matrix.add(week);
-		}
+
+		LocalDate lastWeek = day.getDayOfWeek() - java.time.DayOfWeek;
 		
 		
 		// ⑦ 6．で生成したリストへ格納し、最後に1．で生成したリストへ格納する
 		matrix.add(week);
 		model.addAttribute("matrix", matrix);
 
-//		calendar.add(Calendar.DATE, -1);
-//		lastDate = calendar.get(Calendar.DATE);
 
 		List<Tasks> list = tasks_repo.findAll();
 		model.addAttribute("tasks", list);
