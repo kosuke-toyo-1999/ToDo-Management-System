@@ -12,9 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.dmm.task.Form.TaskForm;
-import com.dmm.task.entity.Tasks;
 import com.dmm.task.repository.TasksRepository;
 import com.dmm.task.service.AccountUserDetails;
 
@@ -24,8 +24,17 @@ public class TaskController {
 	@Autowired
 	private TasksRepository tasks_repo;
 
+	
 	@GetMapping("/main")
 	public String main(Model model) {
+		
+//		Tasks task = new Tasks();
+//		task.setName(User.getUsername());
+//		task.setTitle(task.getTitle());
+//		task.setText(task.getText());
+//		task.setDate(LocalDateTime.now());
+
+//		tasks_repo.save(task);
 
 		// ① 2次元表になるので、ListのListを用意する
 		List<List<LocalDate>> matrix = new ArrayList<>();
@@ -82,14 +91,24 @@ public class TaskController {
 
 		// 8. 管理者は全員分のタスクを見えるようにする
 
-		if (ADMIN == roleName) {
-			Tasks.getName();
-			model.addAttribute("tasks.get(day)", Tasks.getDate());
-		} else {
-
-			model.addAttribute("tasks.get(day)", Tasks.getDate());
-		}
-
+		// LocalDateとTasksとセットで持つ、MultiValueMapというものを使います。
+//		MultiValueMap<LocalDate, Tasks> tasks = new LinkedMultiValueMap<LocalDate, Tasks>();
+//
+//		List<Tasks> list;
+//
+//		// user.getAuthorities() を使って、いまログインしているユーザーがADMINかどうかを判定
+//		if (ADMINだったら) {
+//		    list = Repositoryから全部取得
+//		} else {
+//		    list = Repositoryから当該ユーザーのものだけ取得
+//		}
+//
+//		for(Tasks t : list) {
+//		    tasks.add(t.getDate().toLocalDate(), t);
+//		}
+//
+//		model.addAttribute("tasks", tasks);　//
+//↓ここから先消すかも
 //		List<Tasks> list = tasks_repo.findAll();
 //		model.addAttribute("tasks", list);
 //		TaskForm taskForm = new TaskForm();
@@ -103,7 +122,7 @@ public class TaskController {
 		return "/login";
 	}
 
-	@GetMapping("/main/create")
+	@PostMapping("/main/create")
 	public String create(@Validated TaskForm taskForm, BindingResult bindingResult,
 			@AuthenticationPrincipal AccountUserDetails user, Model model) {
 
@@ -114,14 +133,8 @@ public class TaskController {
 //			model.addAttribute("taskForm", taskForm);
 //			return "/main/create";
 //		}
-//
-//		Tasks task = new Tasks();
-//		task.setName(user.getName());
-//		task.setTitle(task.getTitle());
-//		task.setText(task.getText());
-//		task.setDate(LocalDateTime.now());
-//
-//		tasks_repo.save(task);
+
+
 
 		return "/redirect:";
 	}
