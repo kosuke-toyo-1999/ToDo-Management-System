@@ -2,9 +2,7 @@ package com.dmm.task.controller;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +82,17 @@ public class TaskController {
 		matrix.add(week);
 		model.addAttribute("matrix", matrix);
 		
+		//8. 管理者は全員分のタスクを見えるようにする
+		
+		
+		if (ADMIN == roleName) {
+			Tasks.getName();
+			model.addAttribute("tasks.get(day)", Tasks.getDate());
+		}else  {
+			
+			model.addAttribute("tasks.get(day)", Tasks.getDate());
+		}
+		
 		
 		List<Tasks> list = tasks_repo.findAll();
 		model.addAttribute("tasks", list);
@@ -102,21 +111,21 @@ public class TaskController {
 	public String create(@Validated TaskForm taskForm, BindingResult bindingResult,
 			@AuthenticationPrincipal AccountUserDetails user, Model model) {
 
-		if (bindingResult.hasErrors()) {
-			// エラーがある場合は投稿登録画面を返す
-			List<Tasks> list = tasks_repo.findAll(Collections.sort("date"));
-			model.addAttribute("tasks", list);
-			model.addAttribute("taskForm", taskForm);
-			return "/main/create";
-		}
-
-		Tasks task = new Tasks();
-		task.setName(user.getName());
-		task.setTitle(task.getTitle());
-		task.setText(task.getText());
-		task.setDate(LocalDateTime.now());
-
-		tasks_repo.save(task);
+//		if (bindingResult.hasErrors()) {
+//			// エラーがある場合は投稿登録画面を返す
+//			List<Tasks> list = tasks_repo.findAll();
+//			model.addAttribute("tasks", list);
+//			model.addAttribute("taskForm", taskForm);
+//			return "/main/create";
+//		}
+//
+//		Tasks task = new Tasks();
+//		task.setName(user.getName());
+//		task.setTitle(task.getTitle());
+//		task.setText(task.getText());
+//		task.setDate(LocalDateTime.now());
+//
+//		tasks_repo.save(task);
 
 		return "/redirect:";
 	}
