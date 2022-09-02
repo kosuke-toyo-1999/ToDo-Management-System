@@ -41,9 +41,7 @@ public class TaskController {
 		DayOfWeek DayOfWeek = day.getDayOfWeek();
 
 		// ④ 上で取得したLocalDateに曜日の値（DayOfWeek#getValue)をマイナスして前月分のLocalDateを求める
-		// https://qiita.com/tora_kouno/items/d230f904a2b768ccb319
-		// http://gucci1208.com/2%E3%81%A4%E3%81%AEcalendar%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%92%E6%AF%94%E8%BC%83%E3%81%97%E3%81%A6%E3%80%81%E6%97%A5%E6%95%B0%E5%B7%AE%E3%82%92%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B-488.html
-		// http://heppoen.seesaa.net/article/480642483.html
+
 		day = day.minusDays(DayOfWeek.getValue());
 
 		// ⑤ 1日ずつ増やしてLocalDateを求めていき、2．で作成したListへ格納していき、1週間分詰めたら1．のリストへ格納する
@@ -81,23 +79,21 @@ public class TaskController {
 		// 次週のListを新規作成（newをするとまっさらな新しいListを作成できます）
 		matrix.add(week);
 		model.addAttribute("matrix", matrix);
-		
-		//8. 管理者は全員分のタスクを見えるようにする
-		
-		
+
+		// 8. 管理者は全員分のタスクを見えるようにする
+
 		if (ADMIN == roleName) {
 			Tasks.getName();
 			model.addAttribute("tasks.get(day)", Tasks.getDate());
-		}else  {
-			
+		} else {
+
 			model.addAttribute("tasks.get(day)", Tasks.getDate());
 		}
-		
-		
-		List<Tasks> list = tasks_repo.findAll();
-		model.addAttribute("tasks", list);
-		TaskForm taskForm = new TaskForm();
-		model.addAttribute("taskForm", taskForm);
+
+//		List<Tasks> list = tasks_repo.findAll();
+//		model.addAttribute("tasks", list);
+//		TaskForm taskForm = new TaskForm();
+//		model.addAttribute("taskForm", taskForm);
 
 		return "/main";
 	}
