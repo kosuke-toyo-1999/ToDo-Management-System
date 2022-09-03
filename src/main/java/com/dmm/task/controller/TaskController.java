@@ -124,15 +124,16 @@ public class TaskController {
 		List<Tasks> list;
 
 		if(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).anyMatch(a -> a.equals("ROLE_ADMIN"))) {
-		    list = tasksRepository.findAllByDateBetween((day.minusDays(DayOfWeek.getValue()).atTime(0,0)), (day.atTime(0,0)),Tasks.getName());
+		    //list = tasksRepository.findAllByDateBetween(開始となるLocalDate.atTime(0,0), 終了となるLocalDate.atTime(0,0),);
 		} else {
-		    //list = 
+		    //list = tasksRepository.findByDateBetween(開始となるLocalDate.atTime(0,0), 終了となるLocalDate.atTime(0,0),);
 		}
-//
+
 //		for(Tasks t : list) {
 //		    tasks.add(t.getDate().toLocalDate(), t);
+//		    model.addAttribute("t", t);
 //		}
-//		
+		
 		model.addAttribute("tasks", tasks);
 
 		return "main";
