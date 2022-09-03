@@ -131,10 +131,10 @@ public class TaskController {
 			list = tasksRepository.findByDateBetween(startDay.atTime(0,0), lastDay.atTime(0,0),user.getName());
 		}
 
-//		for(Tasks t : list) {
-//		    tasks.add(t.getDate().toLocalDate(), t);
-//		    model.addAttribute("t", t);
-//		}
+		for(Tasks t : list) {
+		    tasks.add(t.getDate().toLocalDate(), t);
+		    model.addAttribute("t", t);
+		}
 		
 		model.addAttribute("tasks", tasks);
 
@@ -158,14 +158,14 @@ public class TaskController {
 
 	@PostMapping("/main/create")
 	public String registerTask(TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,@AuthenticationPrincipal AccountUserDetails user) {
-
+		
 		Tasks task = new Tasks();
 		task.setTitle(TaskForm.getTitle());
 		task.setText(TaskForm.getText());
-		task.setDate(TaskForm.getDate());
+		task.setDate(TaskForm.getDate().atTime(0, 0));
 		task.setName(user.getName());
 		task.setDone(false);
-
+		
 		// データベースに保存
 		tasksRepository.save(task);
 		return "redirect:/main";
@@ -181,7 +181,7 @@ public class TaskController {
 		Tasks task = new Tasks();
 		task.setTitle(TaskForm.getTitle());
 		task.setText(TaskForm.getText());
-		task.setDate(TaskForm.getDate());
+		task.setDate(TaskForm.getDate().atTime(0, 0));
 		task.setName(user.getName());
 		task.setDone(TaskForm.isDone());
 
