@@ -6,14 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.dmm.task.Form.TaskForm;
@@ -139,34 +139,29 @@ public class TaskController {
 		return "login";
 	}
 
-	@GetMapping("/main/create")
-	public String create(@Validated TaskForm TaskForm, BindingResult bindingResult,
-			@AuthenticationPrincipal AccountUserDetails user, Model model) {
+	  @GetMapping("/main/create/{date}")
+	  public String create(Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
 		TaskForm form = new TaskForm();
 
-		if (bindingResult.hasErrors()) {
-			// エラーがある場合は投稿登録画面を返す
-			return "/main/create";
-		}
-
 		model.addAttribute("Form", form);
 
-		return "/main/create";
+		return "create";
 	}
 
 	
 	@PostMapping("/main/create")
-	public String registerTask(TaskForm TaskForm) {
+	public String registerTask(TaskForm TaskForm,@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
-		TaskForm task = new TaskForm();
+		Tasks task = new Tasks();
 		task.setTitle(TaskForm.getTitle());
 		task.setText(TaskForm.getText());
+		task.setDate(TaskForm.getDate());
 
 		// データベースに保存
-		//tasksRepository.save(task);
+		tasksRepository.save(task);
 		// ユーザ一覧画面へリダイレクト
-		return "/main/create";
+		return "/main";
 	}
 
 	@GetMapping("/main/edit/{id}")
