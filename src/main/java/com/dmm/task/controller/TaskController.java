@@ -36,15 +36,15 @@ public class TaskController {
 
 		// ② 1週間分のLocalDateを格納するListを用意する
 		List<LocalDate> week = new ArrayList<>();
-		System.out.println(week);
+		System.out.println("39=" + week);
 		// ③ その月の1日のLocalDateを取得する
 		LocalDate day = LocalDate.now();
-		System.out.println(day);
+		System.out.println("42=" + day);
 		day = LocalDate.of(day.getYear(), day.getMonthValue(), 1);
-		System.out.println(day);
+		System.out.println("44=" + day);
 		// ④ 曜日を表すDayOfWeekを取得し
 		DayOfWeek DayOfWeek = day.getDayOfWeek();
-		System.out.println(DayOfWeek);
+		System.out.println("47=" + DayOfWeek);
 
 		// ④ 上で取得したLocalDateに曜日の値（DayOfWeek#getValue)をマイナスして前月分のLocalDateを求める
 
@@ -53,44 +53,56 @@ public class TaskController {
 		// ⑤ 1日ずつ増やしてLocalDateを求めていき、2．で作成したListへ格納していき、1週間分詰めたら1．のリストへ格納する
 
 		for (int i = 1; i <= 7; i++) {
-			System.out.println(day);
-			System.out.println(week);
+			System.out.println("56="+day);
+			System.out.println("57="+week);
 			// 1日ごとにdayをweekにaddしなければいけない
 			week.add(day);
 			// 1日増やす（dayをプラス1日する）
-			day.plusDays(1);
+			day = day.plusDays(1);
 		}
 		matrix.add(week);
+		System.out.println("64="+matrix);
 
 		// ⑥2週目以降は単純に1日ずつ日を増やしながらLocalDateを求めてListへ格納していき、土曜日になったら1．のリストへ格納して新しいListを生成する（月末を求めるにはLocalDate#lengthOfMonth()を使う）
-
+		week = new ArrayList<>();
+		System.out.println("68="+week);
 		for (int i = 7; i <= day.lengthOfMonth(); i++) {
+			
+			week.add(day);
 
 			if (day.getDayOfWeek() == java.time.DayOfWeek.SATURDAY) {
 				matrix.add(week);
+				System.out.println("75="+week);
 
 				// 次週のListを新規作成（newをするとまっさらな新しいListを作成できます）
 				week = new ArrayList<>();
 			}
 			// 1日増やす（dayをプラス1日する）
+			
 			day = day.plusDays(1);
+			
+			System.out.println("84="+day);
 		}
 
+		System.out.println("87="+week);
+
 		// ⑦ 最終週の翌月分をDayOfWeekの値を使って計算し、
-		week = new ArrayList<>();
 		for (int j = 1; j <= 7 - day.getDayOfWeek().getValue(); j++) {
-			System.out.println(day);
-			System.out.println(week);
+			System.out.println("92="+day);
+			System.out.println("93="+week);
 			// 1日増やす（dayをプラス1日する）
 			day = day.plusDays(1);
 			week.add(day);
+			
+
+			
 		}
+		matrix.add(week);
 		// ⑦ 6．で生成したリストへ格納し、最後に1．で生成したリストへ格納する
 		// 次週のListを新規作成（newをするとまっさらな新しいListを作成できます）
-		System.out.println(day);
-		System.out.println(week);
-		System.out.println(matrix);
-		matrix.add(week);
+		System.out.println("101="+day);
+		System.out.println("102="+week);
+		System.out.println("103="+matrix);
 		model.addAttribute("matrix", matrix);
 
 		// 8. 管理者は全員分のタスクを見えるようにする
@@ -111,7 +123,7 @@ public class TaskController {
 //		for(Tasks t : list) {
 //		    tasks.add(t.getDate().toLocalDate(), t);
 //		}
-		
+
 //		tasks.add(week);
 		model.addAttribute("tasks", tasks);
 
