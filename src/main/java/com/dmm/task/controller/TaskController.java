@@ -32,24 +32,29 @@ public class TaskController {
 
 		// ① 2次元表になるので、ListのListを用意する
 		List<List<LocalDate>> matrix = new ArrayList<>();
+		System.out.println(matrix);
 
 		// ② 1週間分のLocalDateを格納するListを用意する
 		List<LocalDate> week = new ArrayList<>();
-
+		System.out.println(week);
 		// ③ その月の1日のLocalDateを取得する
 		LocalDate day = LocalDate.now();
+		System.out.println(day);
 		day = LocalDate.of(day.getYear(), day.getMonthValue(), 1);
-
+		System.out.println(day);
 		// ④ 曜日を表すDayOfWeekを取得し
 		DayOfWeek DayOfWeek = day.getDayOfWeek();
+		System.out.println(DayOfWeek);
 
 		// ④ 上で取得したLocalDateに曜日の値（DayOfWeek#getValue)をマイナスして前月分のLocalDateを求める
 
 		day = day.minusDays(DayOfWeek.getValue());
-
+		System.out.println(day);
 		// ⑤ 1日ずつ増やしてLocalDateを求めていき、2．で作成したListへ格納していき、1週間分詰めたら1．のリストへ格納する
 
 		for (int i = 1; i <= 7; i++) {
+			System.out.println(day);
+			System.out.println(week);
 			// 1日ごとにdayをweekにaddしなければいけない
 			week.add(day);
 			// 1日増やす（dayをプラス1日する）
@@ -74,12 +79,17 @@ public class TaskController {
 		// ⑦ 最終週の翌月分をDayOfWeekの値を使って計算し、
 		week = new ArrayList<>();
 		for (int j = 1; j <= 7 - day.getDayOfWeek().getValue(); j++) {
+			System.out.println(day);
+			System.out.println(week);
 			// 1日増やす（dayをプラス1日する）
 			day = day.plusDays(1);
 			week.add(day);
 		}
 		// ⑦ 6．で生成したリストへ格納し、最後に1．で生成したリストへ格納する
 		// 次週のListを新規作成（newをするとまっさらな新しいListを作成できます）
+		System.out.println(day);
+		System.out.println(week);
+		System.out.println(matrix);
 		matrix.add(week);
 		model.addAttribute("matrix", matrix);
 
