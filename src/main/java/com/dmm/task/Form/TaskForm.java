@@ -1,6 +1,6 @@
 package com.dmm.task.Form;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Id;
 
@@ -15,7 +15,7 @@ public class TaskForm {
 	public String text;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	public LocalDateTime date;
+	public LocalDate date;
 
 	@Id
 	public int id;
