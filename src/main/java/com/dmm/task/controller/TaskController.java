@@ -170,13 +170,23 @@ public class TaskController {
 		tasksRepository.save(task);
 		return "redirect:/main";
 	}
-
-	@PostMapping("/main/edit/{id}")
-	public String main_edit_id(TaskForm TaskForm,Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,@AuthenticationPrincipal AccountUserDetails user) {
+	@GetMapping("/main/edit/{id}")
+//	@GetMapping("/main/edit/{date}")
+	public String main_edit_id(Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 		TaskForm form = new TaskForm();
 		model.addAttribute("Form", form);
 		// データベースに保存
 		model.addAttribute("Form", form);
+		
+		
+
+		
+		return "edit";
+	}
+	@PostMapping("/main/edit/{date}")
+//	@PostMapping("/main/edit/{id}")
+	public String edit(TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,@AuthenticationPrincipal AccountUserDetails user) {
+
 		
 		Tasks task = new Tasks();
 		task.setTitle(TaskForm.getTitle());
