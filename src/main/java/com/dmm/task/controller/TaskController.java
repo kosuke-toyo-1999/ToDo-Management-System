@@ -126,7 +126,7 @@ public class TaskController {
 		List<Tasks> list;
 
 		if(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).anyMatch(a -> a.equals("ROLE_ADMIN"))) {
-		    list = tasksRepository.findByDateBetween(startDay.atTime(0,0), lastDay.atTime(0,0),user.getName());
+		    list = tasksRepository.findAllByDateBetween(startDay.atTime(0,0), lastDay.atTime(0,0));
 		} else {
 			list = tasksRepository.findByDateBetween(startDay.atTime(0,0), lastDay.atTime(0,0),user.getName());
 		}
