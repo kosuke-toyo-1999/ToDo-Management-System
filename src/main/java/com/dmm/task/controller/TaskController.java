@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,11 +27,8 @@ public class TaskController {
 	@Autowired
 	private TasksRepository tasksRepository;
 
-	
 	@GetMapping("/main")
-	public String main(Model model) {
-		
-
+	public String main(Model model, @AuthenticationPrincipal AccountUserDetails user) {
 
 		// ① 2次元表になるので、ListのListを用意する
 		List<List<LocalDate>> matrix = new ArrayList<>();
@@ -87,9 +86,10 @@ public class TaskController {
 		// 8. 管理者は全員分のタスクを見えるようにする
 
 		// LocalDateとTasksとセットで持つ、MultiValueMapというものを使います。
-//		MultiValueMap<LocalDate, Tasks> tasks = new LinkedMultiValueMap<LocalDate, Tasks>();
-//
+		MultiValueMap<LocalDate, Tasks> tasks = new LinkedMultiValueMap<LocalDate, Tasks>();
+
 //		List<Tasks> list;
+
 //
 //		// user.getAuthorities() を使って、いまログインしているユーザーがADMINかどうかを判定
 //		if (ADMINだったら) {
@@ -101,15 +101,16 @@ public class TaskController {
 //		for(Tasks t : list) {
 //		    tasks.add(t.getDate().toLocalDate(), t);
 //		}
-//
-//		model.addAttribute("tasks", tasks);　//
 		
-		List<Tasks> list = tasksRepository.findAll();
-		model.addAttribute("tasks", list);
-		model.addAttribute("tasks.get(day)", list);
+//		tasks.add(week);
+		model.addAttribute("tasks", tasks);
+
+//		List<Tasks> list = tasksRepository.findAll();
+
+//		model.addAttribute("tasks.get(day)", list);
 //		TaskForm taskForm = new TaskForm();
 //		model.addAttribute("taskForm", taskForm);
-		
+
 //		Tasks task = new Tasks();
 //		task.setName(task.getName());
 //		task.setTitle(task.getTitle());
@@ -137,8 +138,6 @@ public class TaskController {
 //			model.addAttribute("taskForm", taskForm);
 //			return "/main/create";
 //		}
-
-
 
 		return "/main/create";
 	}
