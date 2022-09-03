@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.dmm.task.Form.TaskForm;
 import com.dmm.task.entity.Tasks;
-import com.dmm.task.entity.Users;
 import com.dmm.task.repository.TasksRepository;
 import com.dmm.task.service.AccountUserDetails;
 
@@ -123,18 +123,11 @@ public class TaskController {
 
 		List<Tasks> list;
 
-		tasks.stream()
-		.filter(u -> Users.getAuthorities() =="ROLE_ADMIN")
-		.
-//		// user.getAuthorities() を使って、いまログインしているユーザーがADMINかどうかを判定
-//		if (user.getAuthorities() <= User.rolename) {fruit.getQuantity() <= 10
-//		    list = tasksRepository.findAll();
-//		    
-//		} else {
-//			
-//		    list = Repositoryから当該ユーザーのものだけ取得
-//		    		
-//		}
+		if(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).anyMatch(a -> a.equals("ROLE_ADMIN"))) {
+		    list = tasksRepository.findAllByDateBetween((day.minusDays(DayOfWeek.getValue()).atTime(0,0)), (day.atTime(0,0)),Tasks.getName());
+		} else {
+		    //list = 
+		}
 //
 //		for(Tasks t : list) {
 //		    tasks.add(t.getDate().toLocalDate(), t);
