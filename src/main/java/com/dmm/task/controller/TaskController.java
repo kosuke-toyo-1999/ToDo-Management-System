@@ -2,7 +2,6 @@ package com.dmm.task.controller;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +14,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.dmm.task.Form.Form;
 import com.dmm.task.entity.Tasks;
@@ -32,7 +32,7 @@ public class TaskController {
 
 		// ① 2次元表になるので、ListのListを用意する
 		List<List<LocalDate>> matrix = new ArrayList<>();
-		System.out.println("35=" +matrix);
+		System.out.println("35=" + matrix);
 
 		// ② 1週間分のLocalDateを格納するListを用意する
 		List<LocalDate> week = new ArrayList<>();
@@ -64,7 +64,7 @@ public class TaskController {
 		System.out.println("64=" + matrix);
 		// ⑥2週目以降は単純に1日ずつ日を増やしながらLocalDateを求めてListへ格納していき、土曜日になったら1．のリストへ格納して新しいListを生成する（月末を求めるにはLocalDate#lengthOfMonth()を使う）
 		week = new ArrayList<>();
-		
+
 		System.out.println("68=" + week);
 		System.out.println("69=" + day.lengthOfMonth());
 		for (int i = 7; i <= day.lengthOfMonth(); i++) {
@@ -87,14 +87,14 @@ public class TaskController {
 		System.out.println("87=" + week);
 		System.out.println("88=" + day.getDayOfWeek().getValue());
 		// ⑦ 最終週の翌月分をDayOfWeekの値を使って計算し、
-		
+
 		for (int j = 0; j <= 7 - day.getDayOfWeek().getValue(); j++) {
 			System.out.println("92=" + day);
 			System.out.println("93=" + week);
 			// 1日増やす（dayをプラス1日する）
 			day = day.plusDays(1);
 			week.add(day);
-			
+
 		}
 		matrix.add(week);
 		// ⑦ 6．で生成したリストへ格納し、最後に1．で生成したリストへ格納する
@@ -110,7 +110,6 @@ public class TaskController {
 		MultiValueMap<LocalDate, Tasks> tasks = new LinkedMultiValueMap<LocalDate, Tasks>();
 
 //		List<Tasks> list;
-
 //
 //		// user.getAuthorities() を使って、いまログインしているユーザーがADMINかどうかを判定
 //		if (ADMINだったら) {
@@ -140,26 +139,34 @@ public class TaskController {
 		return "login";
 	}
 
-	@GetMapping("/main/create/{date}")
+	@GetMapping("/main/create")
 	public String create(@Validated Form Form, BindingResult bindingResult,
 			@AuthenticationPrincipal AccountUserDetails user, Model model) {
 
+		Form form = new Form();
+
 		if (bindingResult.hasErrors()) {
 			// エラーがある場合は投稿登録画面を返す
-			List<Tasks> list = tasksRepository.findAll();
-			model.addAttribute("tasks", list);
-			model.addAttribute("Form", Form);
-			return "/main";
+			return "/main/create";
 		}
-		Tasks task = new Tasks();
-		task.setName(task.getName());
-		task.setTitle(task.getTitle());
-		task.setText(task.getText());
-		task.setDate(LocalDateTime.now());
 
-		tasksRepository.save(task);
+		model.addAttribute("Form", form);
 
 		return "/main";
+	}
+
+	
+	@PostMapping("/main/create")
+	public String registerTask(Form Form) {
+
+		Form task = new Form();
+		task.setTitle(Form.getTitle());
+		task.setText(Form.getText());
+
+		// データベースに保存
+		tasksRepository.save(task);
+		// ユーザ一覧画面へリダイレクト
+		return "redirect:/main/create";
 	}
 
 	@GetMapping("/main/edit/{id}")
