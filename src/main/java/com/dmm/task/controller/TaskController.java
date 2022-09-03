@@ -62,6 +62,7 @@ public class TaskController {
 
 		day = day.minusDays(DayOfWeek.getValue());
 		System.out.println(day);
+		LocalDate startDay = day;
 		// ⑤ 1日ずつ増やしてLocalDateを求めていき、2．で作成したListへ格納していき、1週間分詰めたら1．のリストへ格納する
 
 		for (int i = 1; i <= 7; i++) {
@@ -109,6 +110,7 @@ public class TaskController {
 
 		}
 		matrix.add(week);
+		LocalDate lastDay = day;
 		// ⑦ 6．で生成したリストへ格納し、最後に1．で生成したリストへ格納する
 		// 次週のListを新規作成（newをするとまっさらな新しいListを作成できます）
 		System.out.println("101=" + day);
@@ -124,9 +126,9 @@ public class TaskController {
 		List<Tasks> list;
 
 		if(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).anyMatch(a -> a.equals("ROLE_ADMIN"))) {
-		    //list = tasksRepository.findAllByDateBetween(開始となるLocalDate.atTime(0,0), 終了となるLocalDate.atTime(0,0),);
+		    list = tasksRepository.findByDateBetween(startDay.atTime(0,0), lastDay.atTime(0,0),user.getName());
 		} else {
-		    //list = tasksRepository.findByDateBetween(開始となるLocalDate.atTime(0,0), 終了となるLocalDate.atTime(0,0),);
+			list = tasksRepository.findByDateBetween(startDay.atTime(0,0), lastDay.atTime(0,0),user.getName());
 		}
 
 //		for(Tasks t : list) {
