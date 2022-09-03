@@ -21,5 +21,4 @@ public class Tasks {
 	public LocalDate date;
 	public boolean done;
 
-
 }

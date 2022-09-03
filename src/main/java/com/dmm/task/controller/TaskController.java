@@ -156,6 +156,8 @@ public class TaskController {
 		task.setTitle(TaskForm.getTitle());
 		task.setText(TaskForm.getText());
 		task.setDate(TaskForm.getDate());
+		task.setName(TaskForm.getName());
+		task.setDone(false);
 
 		// データベースに保存
 		tasksRepository.save(task);
