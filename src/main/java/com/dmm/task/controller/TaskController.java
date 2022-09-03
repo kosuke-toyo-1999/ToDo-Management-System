@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.dmm.task.Form.TaskForm;
 import com.dmm.task.entity.Tasks;
+import com.dmm.task.entity.Users;
 import com.dmm.task.repository.TasksRepository;
 import com.dmm.task.service.AccountUserDetails;
 
@@ -123,20 +123,23 @@ public class TaskController {
 
 		List<Tasks> list;
 
-		// user.getAuthorities() を使って、いまログインしているユーザーがADMINかどうかを判定
-		if (user.getAuthorities() == User.rolename) {
-		    list = tasksRepository.findAll();
-		    
-		} else {
-			
-		    list = Repositoryから当該ユーザーのものだけ取得
-		    		
-		}
-
-		for(Tasks t : list) {
-		    tasks.add(t.getDate().toLocalDate(), t);
-		}
-		
+		tasks.stream()
+		.filter(u -> Users.getAuthorities() =="ROLE_ADMIN")
+		.
+//		// user.getAuthorities() を使って、いまログインしているユーザーがADMINかどうかを判定
+//		if (user.getAuthorities() <= User.rolename) {fruit.getQuantity() <= 10
+//		    list = tasksRepository.findAll();
+//		    
+//		} else {
+//			
+//		    list = Repositoryから当該ユーザーのものだけ取得
+//		    		
+//		}
+//
+//		for(Tasks t : list) {
+//		    tasks.add(t.getDate().toLocalDate(), t);
+//		}
+//		
 		model.addAttribute("tasks", tasks);
 
 		return "main";
@@ -173,13 +176,23 @@ public class TaskController {
 	}
 
 	@PostMapping("/main/edit/{id}")
-	public String main_edit_id(Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+	public String main_edit_id(TaskForm TaskForm,Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,@AuthenticationPrincipal AccountUserDetails user) {
 		TaskForm form = new TaskForm();
 		model.addAttribute("Form", form);
 		// データベースに保存
 		model.addAttribute("Form", form);
 		
-		return "/main/create";
+		Tasks task = new Tasks();
+		task.setTitle(TaskForm.getTitle());
+		task.setText(TaskForm.getText());
+		task.setDate(TaskForm.getDate());
+		task.setName(user.getName());
+		task.setDone(TaskForm.isDone());
+
+		// データベースに保存
+		tasksRepository.save(task);
+		
+		return "redirect:/main";
 	}
 
 	@GetMapping("/login")
