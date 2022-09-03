@@ -150,13 +150,13 @@ public class TaskController {
 	}
 
 	@PostMapping("/main/create")
-	public String registerTask(TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+	public String registerTask(TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,@AuthenticationPrincipal AccountUserDetails user) {
 
 		Tasks task = new Tasks();
 		task.setTitle(TaskForm.getTitle());
 		task.setText(TaskForm.getText());
 		task.setDate(TaskForm.getDate());
-		task.setName(TaskForm.getName());
+		task.setName(user.getName());
 		task.setDone(false);
 
 		// データベースに保存
@@ -164,8 +164,13 @@ public class TaskController {
 		return "/main";
 	}
 
-	@GetMapping("/main/edit/{id}")
-	public String main_edit_id() {
+	@PostMapping("/main/edit/{id}")
+	public String main_edit_id(Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+		TaskForm form = new TaskForm();
+		model.addAttribute("Form", form);
+		// データベースに保存
+		model.addAttribute("Form", form);
+		
 		return "/main/create";
 	}
 
