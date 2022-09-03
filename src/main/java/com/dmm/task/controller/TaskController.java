@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
@@ -120,27 +121,23 @@ public class TaskController {
 		// LocalDateとTasksとセットで持つ、MultiValueMapというものを使います。
 		MultiValueMap<LocalDate, Tasks> tasks = new LinkedMultiValueMap<LocalDate, Tasks>();
 
-//		List<Tasks> list;
-//
-//		// user.getAuthorities() を使って、いまログインしているユーザーがADMINかどうかを判定
-//		if (ADMINだったら) {
-//		    list = Repositoryから全部取得
-//		} else {
-//		    list = Repositoryから当該ユーザーのものだけ取得
-//		}
-//
-//		for(Tasks t : list) {
-//		    tasks.add(t.getDate().toLocalDate(), t);
-//		}
+		List<Tasks> list;
 
-//		tasks.add(week);
+		// user.getAuthorities() を使って、いまログインしているユーザーがADMINかどうかを判定
+		if (user.getAuthorities() == User.rolename) {
+		    list = tasksRepository.findAll();
+		    
+		} else {
+			
+		    list = Repositoryから当該ユーザーのものだけ取得
+		    		
+		}
+
+		for(Tasks t : list) {
+		    tasks.add(t.getDate().toLocalDate(), t);
+		}
+		
 		model.addAttribute("tasks", tasks);
-
-//		List<Tasks> list = tasksRepository.findAll();
-
-//		model.addAttribute("tasks.get(day)", list);
-//		TaskForm taskForm = new TaskForm();
-//		model.addAttribute("taskForm", taskForm);
 
 		return "main";
 	}
