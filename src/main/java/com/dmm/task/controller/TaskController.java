@@ -85,18 +85,17 @@ public class TaskController {
 		}
 
 		System.out.println("87="+week);
-
 		// ⑦ 最終週の翌月分をDayOfWeekの値を使って計算し、
 		for (int j = 1; j <= 7 - day.getDayOfWeek().getValue(); j++) {
 			System.out.println("92="+day);
 			System.out.println("93="+week);
 			// 1日増やす（dayをプラス1日する）
-			day = day.plusDays(1);
 			week.add(day);
-			
-
-			
+			day = day.plusDays(1);
 		}
+		week.add(day);
+		day = day.plusDays(1);
+		week.add(day);
 		matrix.add(week);
 		// ⑦ 6．で生成したリストへ格納し、最後に1．で生成したリストへ格納する
 		// 次週のListを新規作成（newをするとまっさらな新しいListを作成できます）
