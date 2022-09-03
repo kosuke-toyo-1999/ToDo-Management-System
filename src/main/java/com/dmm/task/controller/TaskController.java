@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.dmm.task.Form.TaskForm;
+import com.dmm.task.entity.Tasks;
 import com.dmm.task.repository.TasksRepository;
 import com.dmm.task.service.AccountUserDetails;
 
@@ -22,19 +23,13 @@ import com.dmm.task.service.AccountUserDetails;
 public class TaskController {
 
 	@Autowired
-	private TasksRepository tasks_repo;
+	private TasksRepository tasksRepository;
 
 	
 	@GetMapping("/main")
 	public String main(Model model) {
 		
-//		Tasks task = new Tasks();
-//		task.setName(User.getUsername());
-//		task.setTitle(task.getTitle());
-//		task.setText(task.getText());
-//		task.setDate(LocalDateTime.now());
 
-//		tasks_repo.save(task);
 
 		// ① 2次元表になるので、ListのListを用意する
 		List<List<LocalDate>> matrix = new ArrayList<>();
@@ -108,18 +103,27 @@ public class TaskController {
 //		}
 //
 //		model.addAttribute("tasks", tasks);　//
-//↓ここから先消すかも
-//		List<Tasks> list = tasks_repo.findAll();
-//		model.addAttribute("tasks", list);
+		
+		List<Tasks> list = tasksRepository.findAll();
+		model.addAttribute("tasks", list);
+		model.addAttribute("tasks.get(day)", list);
 //		TaskForm taskForm = new TaskForm();
 //		model.addAttribute("taskForm", taskForm);
+		
+//		Tasks task = new Tasks();
+//		task.setName(task.getName());
+//		task.setTitle(task.getTitle());
+//		task.setText(task.getText());
+//		task.setDate(LocalDateTime.now());
+//
+//		tasksRepository.save(task);
 
-		return "/main";
+		return "main";
 	}
 
 	@GetMapping("/")
 	public String index() {
-		return "/login";
+		return "login";
 	}
 
 	@PostMapping("/main/create")
@@ -136,12 +140,12 @@ public class TaskController {
 
 
 
-		return "/redirect:";
+		return "/main/create";
 	}
 
 	@GetMapping("/main/edit/{id}")
 	public String main_edit_id() {
-		return "/redirect:";
+		return "/main/create";
 	}
 
 	@GetMapping("/login")
