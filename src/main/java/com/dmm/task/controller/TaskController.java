@@ -139,8 +139,8 @@ public class TaskController {
 		return "login";
 	}
 
-	  @GetMapping("/main/create/{date}")
-	  public String create(Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+	@GetMapping("/main/create/{date}")
+	public String create(Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
 		TaskForm form = new TaskForm();
 
@@ -149,9 +149,8 @@ public class TaskController {
 		return "create";
 	}
 
-	
 	@PostMapping("/main/create")
-	public String registerTask(TaskForm TaskForm,@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+	public String registerTask(TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
 		Tasks task = new Tasks();
 		task.setTitle(TaskForm.getTitle());
@@ -160,7 +159,6 @@ public class TaskController {
 
 		// データベースに保存
 		tasksRepository.save(task);
-		// ユーザ一覧画面へリダイレクト
 		return "/main";
 	}
 
