@@ -16,7 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.dmm.task.Form.Form;
+import com.dmm.task.Form.TaskForm;
 import com.dmm.task.entity.Tasks;
 import com.dmm.task.repository.TasksRepository;
 import com.dmm.task.service.AccountUserDetails;
@@ -140,10 +140,10 @@ public class TaskController {
 	}
 
 	@GetMapping("/main/create")
-	public String create(@Validated Form Form, BindingResult bindingResult,
+	public String create(@Validated TaskForm TaskForm, BindingResult bindingResult,
 			@AuthenticationPrincipal AccountUserDetails user, Model model) {
 
-		Form form = new Form();
+		TaskForm form = new TaskForm();
 
 		if (bindingResult.hasErrors()) {
 			// エラーがある場合は投稿登録画面を返す
@@ -152,21 +152,21 @@ public class TaskController {
 
 		model.addAttribute("Form", form);
 
-		return "/main";
+		return "/main/create";
 	}
 
 	
 	@PostMapping("/main/create")
-	public String registerTask(Form Form) {
+	public String registerTask(TaskForm TaskForm) {
 
-		Form task = new Form();
-		task.setTitle(Form.getTitle());
-		task.setText(Form.getText());
+		TaskForm task = new TaskForm();
+		task.setTitle(TaskForm.getTitle());
+		task.setText(TaskForm.getText());
 
 		// データベースに保存
-		tasksRepository.save(task);
+		//tasksRepository.save(task);
 		// ユーザ一覧画面へリダイレクト
-		return "redirect:/main/create";
+		return "/main/create";
 	}
 
 	@GetMapping("/main/edit/{id}")
