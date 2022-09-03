@@ -15,7 +15,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import com.dmm.task.Form.TaskForm;
 import com.dmm.task.entity.Tasks;
@@ -93,10 +92,9 @@ public class TaskController {
 			// 1日増やす（dayをプラス1日する）
 			week.add(day);
 			day = day.plusDays(1);
+
 		}
-		week.add(day);
-		day = day.plusDays(1);
-		week.add(day);
+
 		matrix.add(week);
 		// ⑦ 6．で生成したリストへ格納し、最後に1．で生成したリストへ格納する
 		// 次週のListを新規作成（newをするとまっさらな新しいListを作成できます）
@@ -143,17 +141,17 @@ public class TaskController {
 		return "login";
 	}
 
-	@PostMapping("/main/create")
+	@GetMapping("/main/create/{date}")
 	public String create(@Validated TaskForm taskForm, BindingResult bindingResult,
 			@AuthenticationPrincipal AccountUserDetails user, Model model) {
 
-//		if (bindingResult.hasErrors()) {
-//			// エラーがある場合は投稿登録画面を返す
-//			List<Tasks> list = tasks_repo.findAll();
-//			model.addAttribute("tasks", list);
-//			model.addAttribute("taskForm", taskForm);
-//			return "/main/create";
-//		}
+		if (bindingResult.hasErrors()) {
+			// エラーがある場合は投稿登録画面を返す
+			List<Tasks> list = tasksRepository.findAll();
+			model.addAttribute("tasks", list);
+			model.addAttribute("taskForm", taskForm);
+			return "/main";
+		}
 		Tasks task = new Tasks();
 		task.setName(task.getName());
 		task.setTitle(task.getTitle());
@@ -162,7 +160,7 @@ public class TaskController {
 
 		tasksRepository.save(task);
 
-		return "/main/create";
+		return "/main";
 	}
 
 	@GetMapping("/main/edit/{id}")
