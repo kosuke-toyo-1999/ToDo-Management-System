@@ -2,6 +2,7 @@ package com.dmm.task.controller;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -132,13 +133,7 @@ public class TaskController {
 //		TaskForm taskForm = new TaskForm();
 //		model.addAttribute("taskForm", taskForm);
 
-//		Tasks task = new Tasks();
-//		task.setName(task.getName());
-//		task.setTitle(task.getTitle());
-//		task.setText(task.getText());
-//		task.setDate(LocalDateTime.now());
-//
-//		tasksRepository.save(task);
+
 
 		return "main";
 	}
@@ -159,6 +154,13 @@ public class TaskController {
 //			model.addAttribute("taskForm", taskForm);
 //			return "/main/create";
 //		}
+		Tasks task = new Tasks();
+		task.setName(task.getName());
+		task.setTitle(task.getTitle());
+		task.setText(task.getText());
+		task.setDate(LocalDateTime.now());
+
+		tasksRepository.save(task);
 
 		return "/main/create";
 	}
