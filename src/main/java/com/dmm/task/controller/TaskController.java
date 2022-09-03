@@ -29,6 +29,17 @@ public class TaskController {
 
 	@GetMapping("/main")
 	public String main(Model model, @AuthenticationPrincipal AccountUserDetails user) {
+		
+
+		    // ★DEBUG
+		    List<Tasks> tasks_DEBUG = tasksRepository.findAll();
+		    for(Tasks t : tasks_DEBUG) {
+
+		        // 登録したタスクの情報が出力されていれば、set自体はできている
+		        // 確認できたら、あとはカレンダー上にタスク情報を表示させるだけ
+		        System.out.println(t);  
+		    }
+		
 
 		// ① 2次元表になるので、ListのListを用意する
 		List<List<LocalDate>> matrix = new ArrayList<>();
@@ -161,7 +172,7 @@ public class TaskController {
 
 		// データベースに保存
 		tasksRepository.save(task);
-		return "/main";
+		return "redirect:/main";
 	}
 
 	@PostMapping("/main/edit/{id}")
