@@ -171,11 +171,17 @@ public class TaskController {
 	}
 
 	@GetMapping("/main/edit/{id}")
-	public String main_edit(Model model, TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
-			@AuthenticationPrincipal AccountUserDetails user) {
+	public String edit(Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
 		TaskForm form = new TaskForm();
 		model.addAttribute("Form", form);
+
+		return "edit";
+	}
+
+	@PostMapping("/main/edit/{id}")
+	public String main_edit(Model model, TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+			@AuthenticationPrincipal AccountUserDetails user) {
 
 		Tasks task = new Tasks();
 
@@ -187,7 +193,7 @@ public class TaskController {
 
 		tasksRepository.save(task);
 
-		return "/main/edit/{id}";
+		return "redirect:/main";
 	}
 
 	@PostMapping("/main/delete/{id}")
