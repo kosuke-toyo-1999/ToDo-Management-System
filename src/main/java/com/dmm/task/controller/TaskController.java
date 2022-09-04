@@ -170,7 +170,7 @@ public class TaskController {
 		tasksRepository.save(task);
 		return "redirect:/main";
 	}
-	@GetMapping("/main/edit/{id}")
+	@GetMapping("/main/edit/task.id")
 //	@GetMapping("/main/edit/{date}")
 	public String main_edit_id(Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 		TaskForm form = new TaskForm();
@@ -183,7 +183,21 @@ public class TaskController {
 		
 		return "edit";
 	}
-	@PostMapping("/main/edit/{date}")
+	
+	@PostMapping("/main/edit/task.id")
+//	@GetMapping("/main/edit/{date}")
+	public String main_edit(Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+		TaskForm form = new TaskForm();
+		model.addAttribute("Form", form);
+		// データベースに保存
+		model.addAttribute("Form", form);
+		
+		
+
+		
+		return "edit";
+	}
+	@GetMapping("/main/edit/{date}")
 //	@PostMapping("/main/edit/{id}")
 	public String edit(TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,@AuthenticationPrincipal AccountUserDetails user) {
 
@@ -198,6 +212,14 @@ public class TaskController {
 		// データベースに保存
 		tasksRepository.save(task);
 		
+		return "redirect:/main";
+	}
+	
+	@PostMapping("/main/delete/{id}")
+	// 処理の中でidを使えるように、引数にidを追加
+	public String deleteUser(@PathVariable Integer id) {
+		// 指定したIDのユーザーを削除
+		tasksRepository.deleteById(id);
 		return "redirect:/main";
 	}
 
