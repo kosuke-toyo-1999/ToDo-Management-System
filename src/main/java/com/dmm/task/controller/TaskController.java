@@ -30,17 +30,15 @@ public class TaskController {
 
 	@GetMapping("/main")
 	public String main(Model model, @AuthenticationPrincipal AccountUserDetails user) {
-		
 
-		    // ★DEBUG
-		    List<Tasks> tasks_DEBUG = tasksRepository.findAll();
-		    for(Tasks t : tasks_DEBUG) {
+		// ★DEBUG
+		List<Tasks> tasks_DEBUG = tasksRepository.findAll();
+		for (Tasks t : tasks_DEBUG) {
 
-		        // 登録したタスクの情報が出力されていれば、set自体はできている
-		        // 確認できたら、あとはカレンダー上にタスク情報を表示させるだけ
-		        System.out.println(t);  
-		    }
-		
+			// 登録したタスクの情報が出力されていれば、set自体はできている
+			// 確認できたら、あとはカレンダー上にタスク情報を表示させるだけ
+			System.out.println(t);
+		}
 
 		// ① 2次元表になるので、ListのListを用意する
 		List<List<LocalDate>> matrix = new ArrayList<>();
@@ -125,17 +123,17 @@ public class TaskController {
 
 		List<Tasks> list;
 
-		if(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).anyMatch(a -> a.equals("ROLE_ADMIN"))) {
-		    list = tasksRepository.findAllByDateBetween(startDay.atTime(0,0), lastDay.atTime(0,0));
+		if (user.getAuthorities().stream().map(GrantedAuthority::getAuthority).anyMatch(a -> a.equals("ROLE_ADMIN"))) {
+			list = tasksRepository.findAllByDateBetween(startDay.atTime(0, 0), lastDay.atTime(0, 0));
 		} else {
-			list = tasksRepository.findByDateBetween(startDay.atTime(0,0), lastDay.atTime(0,0),user.getName());
+			list = tasksRepository.findByDateBetween(startDay.atTime(0, 0), lastDay.atTime(0, 0), user.getName());
 		}
 
-		for(Tasks t : list) {
-		    tasks.add(t.getDate().toLocalDate(), t);
-		    model.addAttribute("t", t);
+		for (Tasks t : list) {
+			tasks.add(t.getDate().toLocalDate(), t);
+			model.addAttribute("t", t);
 		}
-		
+
 		model.addAttribute("tasks", tasks);
 
 		return "main";
@@ -157,64 +155,41 @@ public class TaskController {
 	}
 
 	@PostMapping("/main/create")
-	public String registerTask(TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,@AuthenticationPrincipal AccountUserDetails user) {
-		
+	public String registerTask(TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+			@AuthenticationPrincipal AccountUserDetails user) {
+
 		Tasks task = new Tasks();
 		task.setTitle(TaskForm.getTitle());
 		task.setText(TaskForm.getText());
 		task.setDate(TaskForm.getDate().atTime(0, 0));
 		task.setName(user.getName());
 		task.setDone(false);
-		
+
 		// データベースに保存
 		tasksRepository.save(task);
 		return "redirect:/main";
 	}
-	@GetMapping("/main/edit/task.id")
-//	@GetMapping("/main/edit/{date}")
-	public String main_edit_id(Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+
+	@GetMapping("/main/edit/{id}")
+	public String main_edit(Model model, TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+			@AuthenticationPrincipal AccountUserDetails user) {
+
 		TaskForm form = new TaskForm();
 		model.addAttribute("Form", form);
-		// データベースに保存
-		model.addAttribute("Form", form);
-		
-		
 
-		
-		return "edit";
-	}
-	
-	@PostMapping("/main/edit/task.id")
-//	@GetMapping("/main/edit/{date}")
-	public String main_edit(Model model, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-		TaskForm form = new TaskForm();
-		model.addAttribute("Form", form);
-		// データベースに保存
-		model.addAttribute("Form", form);
-		
-		
-
-		
-		return "edit";
-	}
-	@GetMapping("/main/edit/{date}")
-//	@PostMapping("/main/edit/{id}")
-	public String edit(TaskForm TaskForm, @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,@AuthenticationPrincipal AccountUserDetails user) {
-
-		
 		Tasks task = new Tasks();
+
 		task.setTitle(TaskForm.getTitle());
 		task.setText(TaskForm.getText());
 		task.setDate(TaskForm.getDate().atTime(0, 0));
 		task.setName(user.getName());
 		task.setDone(TaskForm.isDone());
 
-		// データベースに保存
 		tasksRepository.save(task);
-		
-		return "redirect:/main";
+
+		return "/main/edit/{id}";
 	}
-	
+
 	@PostMapping("/main/delete/{id}")
 	// 処理の中でidを使えるように、引数にidを追加
 	public String deleteUser(@PathVariable Integer id) {
